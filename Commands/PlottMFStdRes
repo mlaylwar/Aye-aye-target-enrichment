@@ -1,0 +1,18 @@
+reads<-read.table("allResids", sep=",", header=T, row.names=1)
+reads$X438_res<-NULL
+reads$X441_res<-NULL
+reads$X449_res<-NULL
+reads$X438_stdRes<-NULL
+reads$X441_stdRes<-NULL
+reads$X449_stdRes<-NULL
+reads$Male<-reads$X441_Mapped+reads$X449_Mapped
+reads$Female<-reads$Mapped+reads$X450_Mapped
+reads2<-reads[reads[,'ScaffoldLength'] <11000,]
+reads3<-reads2[reads2[,'ScaffoldLength'] >2500,]
+MaleModel<-lm(reads3$Male~reads3$ScaffoldLength)
+FemaleModel<-lm(reads3$Female~reads3$ScaffoldLength)
+reads3$MaleStdRes<-rstandard(MaleModel)
+reads3$FemaleStdRes<-rstandard(FemaleModel)
+reads3$ResRatio<-reads3$MaleStdRes/reads3$FemaleStdRes
+
+plot(reads3$MaleStdRes~reads3$FemaleStdRes, xlim=c(-10, 10), ylim=c(-10, 10), col=ifelse(reads3$Scaffold %in% Ychrom$V1, "black", ifelse(reads3$FemaleStdRes < -2.5, ifelse(reads3$ResRatio> -0.2 & reads3$ResRatio < 0.45, "chocolate1", "cyan3"), "cyan3")), pch=".", main="Male standardized residuals compared to female standardized residuals", xlab="Female standardized residuals", ylab="Male standardized residual")

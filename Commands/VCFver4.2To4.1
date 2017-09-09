@@ -1,0 +1,1 @@
+cat vcfHeader |  sed "s/##fileformat=VCFv4.2/##fileformat=VCFv4.1/" | sed "s/(//" | sed "s/)//" | sed "s/,Version=\"3\">/>/" > vcfVer4.1

@@ -1,0 +1,5 @@
+samtools mpileup -uf ../../../index/GenomeAssembly.fa MSR55_mt.bam | bcftools call -c | vcfutils.pl vcf2fq > MSR55_consensus.fa
+
+
+
+

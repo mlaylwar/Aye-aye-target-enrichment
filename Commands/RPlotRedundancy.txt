@@ -1,0 +1,19 @@
+BTS68_mt<-read.table("BTS68_mt_duplicates", sep=" ", header=FALSE)
+TVY_mt<-read.table("TVY7-214_mt_duplicates", sep=" ", header=FALES)
+TVY_mt<-read.table("TVY7-214_mt_duplicates", sep=" ", header=FALSE)
+SRR709438_mt<-read.table("SRR709438_mt_duplicates", sep=" ", header=FALSE)
+BTS68_Mt<-BTS68_mt[-1,]       
+BTS68_Mt$nonRedundant<-BTS68_Mt$V2-BTS68_Mt$V1
+TVY_Mt<-TVY_mt[-1,]
+SRR709438_Mt<-SRR709438_mt[-1,]
+TVY_Mt$nonRedundant<-TVY_Mt$V2-TVY_Mt$V1
+SRR709438_Mt$nonRedundant<-SRR709438_Mt$V2-SRR709438_Mt$V1
+plot(BTS68_Mt$V2~BTS68_Mt$nonRedundant, ann=FALSE, type="n", xlim=c(0.1, 200), ylim=c(0.1, 200))
+points(BTS68_Mt$V2~BTS68_Mt$nonRedundant, col="blue", pch=20)
+points(TVY_Mt$V2~TVY_Mt$nonRedundant, col="red", pch=20)
+points(SRR709438_Mt$V2~SRR709438_Mt$nonRedundant, col="green", pch=20) 
+title(xlab="Total mapped reads", ylab="Non-redundant reads", main="Sequencing redundancy mt alignment")
+legend(10, 190, c("BTS68 (remote)", "TVY7-214 (Quality)", "SRR709438 (Northern)"), pch=20, col=c("blue", "red", "green"))
+dev.copy(jpeg, 'Sequencing redundancy.jpeg')
+dev.off()
+

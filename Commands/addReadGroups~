@@ -1,0 +1,9 @@
+java -jar /global/software/picard/picard1106/AddOrReplaceReadGroups.jar I=${k}_baits.bam O=${k}.bam RGID=${k} RGLB=1 RGPL=illumina RGPU=9 RGSM=${k}
+
+module load samtools/1.3
+samtools index ${k}.bam
+#for SRA samples select only paired reads using samtools view -f 0x02 -b SRR709440_sorted.bam > SRR709440_paired.bam
+#then index using samtools index
+
+#for SRA quality scores are in old illumina format phred +64 so must fix misencoded to change to current phred +33 encoding
+/global/software/gatk/gatk322/bin/gatk.sh -Xmx1g -Xms1g -T HaplotypeCaller -R ../../../index/BaitScaffolds_stitched.fa -I ${k}.bam --emitRefConfidence GVCF -variant_index_type LINEAR -variant_index_parameter 128000 -o ${k}.g.vcf

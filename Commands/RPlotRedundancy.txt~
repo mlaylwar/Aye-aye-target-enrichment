@@ -1,0 +1,26 @@
+> BTS68_mt<-read.table("BTS68_mt_duplicates", sep=" ", header=FALSE)
+> TVY_mt<-read.table("TVY7-214_mt_duplicates", sep=" ", header=FALES)
+> TVY_mt<-read.table("TVY7-214_mt_duplicates", sep=" ", header=FALSE)
+> SRR709438_mt<-read.table("SRR709438_mt_duplicates", sep=" ", header=FALSE)
+> BTS68_Mt<-BTS68_mt[-1,]       
+> BTS68_Mt$nonRedundant<-BTS68_Mt$V2-BTS68_Mt$V1
+> print(BTS68_Mt)
+   V1 V2 nonRedundant
+2   3 15           12
+3   6 23           17
+4   9 29           20
+5  10 37           27
+6  12 43           31
+7  15 56           41
+8  16 63           47
+9  18 72           54
+10 24 91           67
+> TVY_Mt<-TVY_mt[-1,]
+> SRR709438_Mt<-SRR709438_mt[-1,]
+> TVY_Mt$nonRedundant<-TVY_Mt$V2-TVY_Mt$V1
+> SRR709438_Mt$nonRedundant<-SRR709438_Mt$V2-SRR709438_Mt$V1
+> plot(BTS68_Mt$V2~BTS68_Mt$nonRedundant, ann=FALSE, type="n", xlim=c(0.1, 200), ylim=c(0.1, 200))
+> points(BTS68_Mt$V2~BTS68_Mt$nonRedundant, col="blue", pch=20)
+> points(TVY_Mt$V2~TVY_Mt$nonRedundant, col="red", pch=20)
+> points(SRR709438_Mt$V2~SRR709438_Mt$nonRedundant, col="green", pch=20) 
+

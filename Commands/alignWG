@@ -1,0 +1,54 @@
+#!/bin/bash
+#PBS -S /bin/bash
+#PBS -m bea
+#PBS -M mlaylwar@ucalgary.ca
+
+#PBS -l nodes=1:ppn=24
+#PBS -l mem=60gb
+#PBS -l walltime=12:00:00
+
+# Sample script for running an OpenMP-based parallel program, openmp_diffuse.
+
+cd $PBS_O_WORKDIR
+echo "Current working directory is `pwd`"
+
+echo "Running on `hostname`"
+
+# On many WestGrid systems a variable PBS_NUM_PPN is automatically
+# assigned the number of cores requested of the batch system
+# on a single node (as is appropriate for OpenMP-based programs) and one could use
+
+# echo "Running on $PBS_NUM_PPN cores."
+# export OMP_NUM_THREADS=$PBS_NUM_PPN
+# On systems where $PBS_NUM_PPN is not available, one could use:
+
+CORES=`/bin/awk 'END {print NR}' $PBS_NODEFILE`
+echo "Running on $CORES cores."
+
+echo "Starting run at: `date`"
+module load samtools/1.3
+module load java/1.8.0_45
+j=01
+k=SRR709448
+/global/software/bwa/bwa0712/bin/bwa mem -M -t 24 -R "@RG\tID:J00153\tPL:ILLUMINA\tPU:HF3YMBBXX.$j\tSM:$k\tLB:$k.1" -p ../index/GenomeAssembly.fa ../data/SeqRound2/contaminants/mus/clean/${k}/"${k}_clean.fastq" | \
+samtools view -Sb -F4 - | samtools sort -o ${k}_WG_clean -
+
+samtools index ${k}_WG_clean
+samtools view -h ${k}_WG_clean | awk '$6 !~ /H|S/{print}' | samtools view -bS - > ${k}_clean_noclips.bam
+samtools index ${k}_clean_noclips.bam
+samtools flagstat ${k}_clean_noclips.bam > ${k}_WG_clean_fstat
+
+java -jar /global/software/picard/picard1106/MarkDuplicates.jar I="${k}_WG_clean_noclips.bam" O="${k}_WG_clean.bam" REMOVE_DUPLICATES=TRUE METRICS_FILE="${k}_Metrics_WG_clean.txt"
+
+samtools index ${k}_WG_clean.bam
+samtools view -h ${k}_WG_clean.bam | awk '$6 !~ /H|S/{print}' | samtools view -bS - > ${k}.noclips.bam
+samtools index ${k}.noclips.bam
+
+samtools flagstat ${k}.noclips.bam > ${k}_noDup_fstat
+samtools idxstats ${k}.noclips.bam |grep -Ff baitScaffs.list  > ${k}_noClips_baits_stats
+samtools idxstats ${k}.noclips.bam |grep -Ff YBaits.list  > ${k}_noClips_Ystats
+samtools idxstats ${k}.noclips.bam |grep -Ff autoBaits.list  > ${k}_auto_noClips_stats
+
+echo alignment complete for ${k}
+exit 0
+

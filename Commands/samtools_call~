@@ -1,0 +1,6 @@
+samtools mpileup -uf ../../index/mtGenome.fa MSR55_baits.bam FKIAN13-01_baits.bam FKIAN13-07B_baits.bam FTORO12-02_baits.bam TVY7-214_baits.bam BTS108_baits.bam BTS38_baits.bam SRR709439_baits.bam SRR709440_baits.bam SRR709441_baits.bam SRR709442_baits.bam SRR709443_baits.bam SRR709444_baits.bam SRR709445_baits.bam SRR709446_baits.bam SRR709448_baits.bam SRR709449_baits.bam SRR709450_baits.bam HIH7-11_baits.bam HIH8_baits.bam HIH11_baits.bam | bcftools call -mv --ploidy-file list -Ov > mt_all.vcf
+
+samtools mpileup -uf ../../../index/YScaffoldsStitched.fa FKIAN13-01/FKIAN13-01_Y.bam FKIAN13-07B/FKIAN13-07B_Y.bam FTORO12-02/FTORO12-02_Y.bam TVY7-214/TVY7-214_Y.bam 'NOSY89(East4_441)'/NOSY89_Y.bam HIH7-11/HIH7-11_Y.bam HIH8/HIH8_Y.bam HIH11/HIH11_Y.bam HIH6'(West2_449)/SRR709449_Y.bam' | bcftools call -mv --ploidy-file list -Ov > Y_raw.vcf
+
+
+samtools mpileup -uf ../../index/mtGenome.fa MSR55_baits.bam FKIAN13-01_baits.bam FKIAN13-07B_baits.bam FTORO12-02_baits.bam TVY7-214_baits.bam BTS108_baits.bam BTS38_baits.bam SRR709439_baits.bam SRR709440_baits.bam SRR709441_baits.bam SRR709442_baits.bam SRR709443_baits.bam SRR709444_baits.bam SRR709445_baits.bam SRR709446_baits.bam SRR709448_baits.bam SRR709449_baits.bam SRR709450_baits.bam HIH7-11_baits.bam HIH8_baits.bam HIH11_baits.bam | bcftools call -mv --ploidy-file list -Ov > autosome.vcf

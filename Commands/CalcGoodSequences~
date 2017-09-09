@@ -1,0 +1,1 @@
+awk -F ": " '/Good sequences/ {print $2}' QfilterMt_MSR01.pbs.e382609 | awk '{gsub(",", "",$1);sum += $1} END {print sum}'

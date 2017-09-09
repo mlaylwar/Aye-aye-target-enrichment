@@ -1,0 +1,28 @@
+samtools view -bh ../../${k}/${k}_shotgun.noclips.bam AGTM010362721 AGTM010367735 AGTM010373564 AGTM011517174 AGTM011524717 AGTM011525187 AGTM011563425 AGTM011581022 AGTM011581535 AGTM011594754 AGTM011602746 AGTM011619194 AGTM011629266 AGTM011639187 AGTM011647810 AGTM011661987 AGTM011685147 AGTM011685443 AGTM011701638 AGTM011705545 AGTM011716352 AGTM011733371 AGTM011750151 AGTM011767992 AGTM011771167 AGTM011785410 AGTM011785587 AGTM011796577 AGTM011816674 AGTM011829991 AGTM011843781 AGTM011846451 AGTM012307064 AGTM012320607 AGTM012928007 AGTM012935773 AGTM012938893 AGTM012947680 AGTM010365256 AGTM010367322 AGTM010377475 AGTM010384375 AGTM010385076 AGTM010389518 AGTM010393157 AGTM011522840 AGTM011523146 AGTM011523300 AGTM011523476 AGTM011523833 AGTM011524736 AGTM011525452 AGTM011525803 AGTM011570554 AGTM011588825 AGTM011593103 AGTM011594224 AGTM011599255 AGTM011606540 AGTM011635490 AGTM011641464 AGTM011645895 AGTM011649473 AGTM011654835 AGTM011658499 AGTM011685624 AGTM011692601 AGTM011692945 AGTM011695095 AGTM011703986 AGTM011705099 AGTM011705945 AGTM011706155 AGTM011716879 AGTM011735848 AGTM011751064 AGTM011785302 AGTM011794567 AGTM011796831 AGTM011807162 AGTM011809928 AGTM011815891 AGTM011885465 AGTM012285287 AGTM012298372 > ${k}_Yreads.bam
+
+java -jar /global/software/picard/picard1106/SamToFastq.jar I=${k}_Yreads.bam FASTQ=${k}_Y1.fastq SECOND_END_FASTQ=${k}_Y2.fastq
+
+sed -e '4~4y/@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghi/!"#$%&'\''()*+,-.\/0123456789:;<=>?@ABCDEFGHIJ/' ${k}_Y1.fastq > ${k}_R1.fastq
+sed -e '4~4y/@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghi/!"#$%&'\''()*+,-.\/0123456789:;<=>?@ABCDEFGHIJ/' ${k}_Y2.fastq > ${k}_R2.fastq
+
+/global/software/bwa/bwa0712/bin/bwa mem -M -t 24 ../../../index/YScaffoldsStitched.fa ${k}_Y1.fastq ${k}_Y2.fastq | samtools view -Sb -F4 -|samtools sort -o ${k}_Ybaits.bam -
+
+java -jar /global/software/picard/picard1106/AddOrReplaceReadGroups.jar I=${k}_Ybaits.bam O=${k}_Y.bam RGID=${k} RGLB=1 RGPL=illumina RGPU=${i} RGSM=${k}
+
+samtools index ${k}_Y.bam
+
+#for mtDNA sequences from northern individuals
+samtools view -bh ../../WGS/${k}.noclips.bam 'ENA|AB371085|AB371085.1' > ${k}_mt.bam
+samtools view -bh -f 0x02 ${k}_mt.bam > ${k}_mtPairs.bam
+java -jar /global/software/picard/picard1106/SamToFastq.jar I=${k}_mtPairs.bam FASTQ=${k}_1.fastq SECOND_END_FASTQ=${k}_2.fastq
+
+sed -e '4~4y/@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghi/!"#$%&'\''()*+,-.\/0123456789:;<=>?@ABCDEFGHIJ/' ${k}_1.fastq > ${k}_R1.fastq
+sed -e '4~4y/@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghi/!"#$%&'\''()*+,-.\/0123456789:;<=>?@ABCDEFGHIJ/' ${k}_2.fastq > ${k}_R2.fastq
+
+/global/software/bwa/bwa0712/bin/bwa mem -M -t 24 ../../index/mtGenome.fa ${k}_R1.fastq ${k}_R2.fastq | samtools view -Sb -F4 -|samtools sort -o ${k}_mtAlign.bam -
+
+java -jar /global/software/picard/picard1106/AddOrReplaceReadGroups.jar I=${k}_mtAlign.bam O=${k}_mtRe.bam RGID=${k} RGLB=1 RGPL=illumina RGPU=${i} RGSM=${k}
+
+samtools sort ${k}_mtRe.bam > ${k}_mtSorted.bam
+
+

@@ -1,0 +1,25 @@
+SRR709438<-read.table("SRR709438_nonRed_trim", sep="\t", header=F)   
+SRR709441<-read.table("SRR709441_nonRed_trim", sep="\t", header=F)
+SRR709449<-read.table("SRR709449_nonRed_trim", sep="\t", header=F)
+SRR709450<-read.table("SRR709450_nonRed_trim", sep="\t", header=F)
+colnames(SRR709438)<-c("Scaffold", "ScaffoldLength", "Mapped") 
+colnames(SRR709441)<-c("Scaffold", "ScaffoldLength", "Mapped")
+colnames(SRR709449)<-c("Scaffold", "ScaffoldLength", "Mapped")
+colnames(SRR709450)<-c("Scaffold", "ScaffoldLength", "Mapped") 
+SRR709438_lm<-lm(SRR709438$Mapped~SRR709438$ScaffoldLength)
+SRR709438$res<-resid(SRR709438_lm)
+SRR709438$stdRes<-rstandard(SRR709438_lm)  
+SRR709441_lm<-lm(SRR709441$Mapped~SRR709441$ScaffoldLength)
+SRR709441$res<-resid(SRR709441_lm)
+SRR709441$stdRes<-rstandard(SRR709441_lm)
+SRR709449_lm<-lm(SRR709449$Mapped~SRR709449$ScaffoldLength)
+SRR709449$res<-resid(SRR709449_lm)
+SRR709449$stdRes<-rstandard(SRR709449_lm)
+SRR709450_lm<-lm(SRR709450$Mapped~SRR709450$ScaffoldLength)
+SRR709450$res<-resid(SRR709450_lm)
+SRR709450$stdRes<-rstandard(SRR709450_lm)              
+
+plot(SRR709438$res~SRR709438$ScaffoldLength, pch=".", type="n", ann=null, xlim=c(2000, 15000))
+
+
+

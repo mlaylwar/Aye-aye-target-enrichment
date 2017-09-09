@@ -1,0 +1,6 @@
+reads2<-reads[reads[,'ScaffoldLength'] <11000,]
+reads3<-reads2[reads2[,'ScaffoldLength'] >2500,]
+MaleModel<-lm(reads3$Males~reads3$ScaffoldLength)
+FemaleModel<-lm(reads3$Females~reads3$ScaffoldLength)
+
+plot(reads$MaleStdRes~reads$FemaleStdRes, pch=".", xlim=c(-10, 10), ylim=c(-10, 10), col=ifelse(reads$Scaffold %in% Ychrom$V1, "chartreuse", ifelse(reads$FemaleStdRes < -2.2, ifelse(reads$ResRatio> 0.2 & reads$ResRatio < 0.4, "chocolate1", "cyan3"), "cyan3")),main="Male standardized residuals compared to female standardized residuals", xlab="Female standardized residuals", ylab="Male standardized residual")

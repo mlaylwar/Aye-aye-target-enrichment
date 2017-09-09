@@ -1,0 +1,7 @@
+#Running STRUCTURE from frontend
+
+'java -cp class/Structure.jar RunStructure'
+
+# in order to write files from simulation open structure as sudo ./structure
+
+# Inputting project make sure the data file is in a different folder than the project folder

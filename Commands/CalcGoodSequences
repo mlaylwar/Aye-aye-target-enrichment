@@ -1,0 +1,13 @@
+awk '/Good sequences \(pairs)/ {print $4}' QfilterMt_*.pbs.e382609 | awk '{gsub(",", "",$1);sum += $1*2} END {print sum}'
+
+while read k
+do
+	for ((i=1; i<5; i++))
+	do
+	awk 'FNR==1 {print $1}' ${k}_${i}_fstat >> ${k}_PEdup
+	done
+	awk '{sum+=$1} END {print "PE Duplicate reads '${k}'",sum}' ${k}_PEdup >> duplicateReadCount 
+done < SampleNames.txt
+
+exit 0
+

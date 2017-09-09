@@ -1,0 +1,9 @@
+
+ID=NS500
+SM=
+PU=
+BAR=
+
+
+java -jar picard.jar AddOrReplaceReadGroups I=${k}_mt_QF.bam O=${k}_mt_QF.bam RGID=1 RGLB=lib1 RGPL=illumina RGPU=unit1 \
+      RGSM=20

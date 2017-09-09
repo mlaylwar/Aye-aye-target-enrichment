@@ -1,0 +1,11 @@
+SRR709438<-read.table("SRR709438_length", sep="\t", header=F)
+colnames(SRR709438)<-c("Scaffold", "ScaffoldLength", "Mapped")
+SRR709438_lm<-lm(SRR709438$Mapped~SRR709438$ScaffoldLength)
+SRR709438$res<-resid(SRR709438_lm)
+SRR709438$stdRes<-rstandard(SRR709438_lm)
+write.csv(SRR709438, file="SRR709438_residuals.csv")
+jpeg('SRR709438_res.jpeg') 
+plot(SRR709438$res~as.numeric(row.names(SRR709438)), pch=".", xlab="Scaffold row", ylab="Residuals", main="SRR709438 (female)")
+dev.off()
+
+

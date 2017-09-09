@@ -1,0 +1,1 @@
+cat YList.list | tr '\r\n' ' ' > YScaffoldIds

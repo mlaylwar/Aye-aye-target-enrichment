@@ -1,0 +1,4 @@
+#Only allow 10% mismatches before clipping
+~/Software/bamUtil-master/bin/bam filter --in ${k}_mtSorted.bam --refFile ../../index/BaitScaffolds_stitched.fa --out ${k}_misMatch.bam --mismatchThreshold 0.066
+# remove clipped reads
+samtools view -h ${k}_WG_clean.bam | awk '$6 !~ /H|S/{print}' | samtools view -bS - > ${k}.noclips.bam

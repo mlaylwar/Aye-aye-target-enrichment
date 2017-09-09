@@ -1,0 +1,17 @@
+Depth and bredth of coverage
+samtools depth ${k}/${k}_good_noclips.bam | awk '{sum+=$3; sumsq+=$3*$3} END { print "Average = ",sum/NR; print "Stdev = ",sqrt(sumsq/NR - (sum/NR)**2); print "PercentCov=" (NR/16648)*100} '> ${k}/${k}_stats
+
+Count Bases Covered and Remove the Ns from fasta
+ 
+grep -v \> [infile] | tr -d '\n' | sed 's/N//g' | wc -c
+  
+How to count Ns and identify percent coverage from fasta
+ 
+len=`tail -1 <file.fa> | awk '{print length}'` ; non=`tail -1 <file.fa> | sed 's/[nN]//g' | awk '{print length}'` ; echo $non | awk -v len=$len '{print $1/len}'
+
+
+To get percent coverage from bam
+samtools depth ${k}_mt.bam > ${k}_depth
+samtools depth -a ${k}_mt.bam > ${k}_depth_all
+
+ 

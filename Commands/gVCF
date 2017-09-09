@@ -1,0 +1,2 @@
+ java -jar /global/software/gatk/gatk322/GenomeAnalysisTK.jar -T HaplotypeCaller -R ../index/GenomeAssembly.fa -I SRR709441_WG_MarkDup.bam -L YList.list --fix_misencoded_quality_scores --emitRefConfidence GVCF -variant_index_type LINEAR -variant_index_parameter 128000 -o SRR709441_Y_variants.g.vcf
+

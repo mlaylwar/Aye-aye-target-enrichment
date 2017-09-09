@@ -1,0 +1,11 @@
+#first add read groups to sam header as they aren't present
+#index new bam file with read groups using samtools index
+
+#call variants for single file
+/global/software/gatk/gatk322/bin/gatk.sh -Xmx1g -Xms1g -T HaplotypeCaller -R ../../../../index/BaitScaffolds_stitched.fa -I ${k}_capped.bam --emitRefConfidence GVCF  -stand_call_conf 5 -variant_index_type LINEAR -variant_index_parameter 128000 -o ${k}.g.vcf
+
+
+#for mitogenomes
+/global/software/gatk/gatk322/bin/gatk.sh -Xmx1g -Xms1g -T HaplotypeCaller --ploidy 1 -R ../../index/mtGenome.fa -I ${k}_mtSorted.bam --emitRefConfidence GVCF -stand_call_conf 20 -variant_index_type LINEAR -variant_index_parameter 128000 -o ${k}.g.vcf
+
+java -jar -Xmx1g -Xms1g ~/Software/GenomeAnalysisTK-3.7/GenomeAnalysisTK.jar -T HaplotypeCaller -ploidy 1 -R ../../index/mtGenome.fa -I ${k}_mtSorted.bam --emitRefConfidence GVCF -stand_call_conf 10 -o ${k}.g.vcf

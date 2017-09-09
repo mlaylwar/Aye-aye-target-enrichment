@@ -1,0 +1,1 @@
+awk '{ if (length($6) < 4) print }' auto_BTS68 > auto_BTS68_SNPs

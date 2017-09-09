@@ -1,0 +1,72 @@
+#R plot heatmap with values printed on map
+
+#1. read in matrix
+mt_SBD<-read.csv("mt_SBD_noHVR.mibs", sep=" ", header=F)
+#2. name columns and rows
+colnames(mt_SBD)<-c("FKIAN13-01", "FKIAN13-07B", "FTORO12-02", "HIH7-11", "HIH8", "SRR709441", "SRR709448", "SRR709449", "TVY-7214")
+rownames(mt_SBD)<-c("FKIAN13-01", "FKIAN13-07B", "FTORO12-02", "HIH7-11", "HIH8", "SRR709441", "SRR709448", "SRR709449", "TVY-7214")
+#3. remove extra column
+mt_SBD<-mt_SBD[-10]
+#4. Round decimals to 2 places
+mt_SBD<-round(mt_SBD, digits=2)
+#5. convert from data frame to matrix
+mt_SBD<-data.matrix(mt_SBD)
+#6. Reorder rows and columns
+mt_SBD<-mt_SBD[c(1,2,3,9,6,4,5,7,8),c(1,2,3,9,6,4,5,7,8)]
+#7. set output as jpeg
+jpeg('mt_SBD.jpeg')
+
+new_map <- heatmap.2(mt_SBD, Rowv=FALSE, Colv=FALSE, trace='none', key=FALSE, col = rev(heat.colors(256)), cellnote=mt_SBD, notecol="black", dendrogram="none", margins=c(10,10),lwid = c(.1,.99),lhei = c(.1,.99))
+
+dev.off()
+
+#1. read in matrix
+Y_SBD<-read.csv("../CLEAN/Y_chrom/Y_gatk2.mibs", sep=" ", header=F)
+#2. name columns and rows
+colnames(Y_SBD)<-c("FKIAN13-01", "FKIAN13-07B", "FTORO12-02", "HIH11", "HIH7-11", "HIH8", "SRR709441", "SRR709449", "TVY-7214")
+rownames(Y_SBD)<-c("FKIAN13-01", "FKIAN13-07B", "FTORO12-02", "HIH11", "HIH7-11", "HIH8", "SRR709441", "SRR709449", "TVY-7214")
+#3. remove extra column
+Y_SBD<-Y_SBD[-10]
+#4. Round decimals to 2 places
+Y_SBD<-round(Y_SBD, digits=2)
+#5. convert from data frame to matrix
+Y_SBD<-data.matrix(Y_SBD)
+#6. Reorder rows and columns
+Y_SBD<-Y_SBD[c(1,2,3,9,7,5,6,4,8),c(1,2,3,9,7,5,6,4,8)]
+#7. set output as jpeg
+jpeg('Y_SBD.jpeg')
+
+new_map <- heatmap.2(Y_SBD, Rowv=FALSE, Colv=FALSE, trace='none', key=FALSE, col = rev(heat.colors(256)), cellnote=Y_SBD, notecol="black", dendrogram="none", margins=c(10,10),lwid = c(.1,.99),lhei = c(.1,.99))
+
+dev.off()
+
+#For mitoPhylo
+#1. read in matrix
+mitoPhylo<-read.csv("mitoPhylo.mibs", sep=" ", header=F)
+#2. name columns and rows
+colnames(mtPhylo)<-c("BTS108", "BTS38", "FKIAN13-01", "FKIAN13-07B", "MSR58", "FTORO12-02", "HIH7-11", "HIH8", "SRR709439", "SRR709448", "SRR709449", "SRR709450", "SRR709440", "SRR709441", "SRR709442", "TVY-7214", "SRR709443", "SRR709444", "SRR709445", "SRR709446")
+rownames(mtPhylo)<-c("BTS108", "BTS38", "FKIAN13-01", "FKIAN13-07B", "MSR58", "FTORO12-02", "HIH7-11", "HIH8", "SRR709439", "SRR709448", "SRR709449", "SRR709450", "SRR709440", "SRR709441", "SRR709442", "TVY-7214", "SRR709443", "SRR709444", "SRR709445", "SRR709446")
+#3. remove extra column
+mitoPhylo<-mitoPhylo[-24]
+#4. Round decimals to 2 places
+mitoPhylo<-round(mitoPhylo, digits=2)
+#5. convert from data frame to matrix
+mitoPhylo<-data.matrix(mitoPhylo)
+#6. Reorder rows and columns
+mtPhylo<-mtPhylo[c(1,2,3,4,5,6,7,8,10,11,12,9,13,14,15,16,17,18,19,20),c(1,2,3,4,5,6,7,8,10,11,12,9,13,14,15,16,17,18,19,20)]
+#7. Set size of canvas
+par(mar=c(15,15,15,15))
+#8. Set output as jpeg
+jpeg('mitoPhylo.jpeg')
+
+new_map <- heatmap.2(mtPhylo, Rowv=FALSE, Colv=FALSE, trace='none', key=FALSE, col = rev(heat.colors(256)), cellnote=mtPhylo, notecol="black", dendrogram="none", margins=c(5,5),lwid = c(.1,.99),lhei = c(.1,.99))
+
+dev.off()
+
+#For nuclearSNPs
+nuPhylo<-read.csv("filePath to nuIBS.csv", sep='\t')
+#2. name rows
+rownames(nuPhylo)<-c("FKIAN13-01", "FKIAN13-07B", "FTORO12-02", "TVY7-214", "NOSY89", "East2", "East3", "East4", "East5", "HIH7-11", "HIH8", "West1", "West2", "West3", "North1", "North2", "North3", "North4")
+new_map <- heatmap.2(nuPhylo, Rowv=FALSE, Colv=FALSE, trace='none', key=FALSE, col = new_col, cellnote=nuPhylo, notecol="black", dendrogram="none", margins=c(5,5),lwid = c(.1,.99),lhei = c(.1,.99))
+
+

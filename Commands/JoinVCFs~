@@ -1,0 +1,15 @@
+java -jar GenomeAnalysisTK.jar -T GenotypeGVCFs -R ../index/GenomeAssembly.fa --variant TVY7.214_Y_variants.g.vcf --variant SRR709441_Y_variants.g.vcf -o Y_variants.vcf
+
+Filtering
+
+Call variants
+java -jar GenomeAnalysisTK.jar -T SelectVariants -R ../index/GenomeAssembly.fa -V Y_variants.vcf -selectType SNP -o raw_Y_snps.vcf 
+
+
+java -jar GenomeAnalysisTK.jar -T VariantFiltration -R ../index/GenomeAssembly.fa \ 
+    -V raw_snps.vcf \ 
+    --filterExpression "QD < 2.0 || FS > 60.0 || MQ < 40.0 || MQRankSum < -12.5 || ReadPosRankSum < -8.0" \ 
+    --filterName "my_snp_filter" \ 
+    -o filtered_snps.vcf 
+
+

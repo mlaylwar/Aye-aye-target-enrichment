@@ -1,0 +1,5 @@
+Select reads witout clipping based on CIGAR
+samtools view -h sample.bam | awk '$6 !~ /H|S/{print}' | samtools view -bS - > sample.noclips.bam
+
+Select reads with mapping quality of 60
+samtools view -bq 60 input.bam > QfilteredOut.bam

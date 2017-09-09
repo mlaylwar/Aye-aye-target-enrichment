@@ -1,0 +1,29 @@
+#reset colour pallet for comparability
+#1.set variable
+heatCol<-rev(heat.colors(256))
+#2.set r1 and r1 variables
+r1<-range(mt_SBD)-median(mt_SBD)
+r2<-range(Y_SBD)-median(Y_SBD)
+#3.calculate proportion of larger range that smaller range takes up
+prop<-r1/r2
+#4.set the mid-range for smaller palette
+cent<-length(heatCol)/2+0.5
+ind<-cent/prop
+idx<-round(cent - c(1,-1)*ind)
+new_col<-heatCol[Reduce(seq,idx)]
+
+
+#for Phylogeog
+#reset colour pallet for comparability
+#1.set variable
+heatCol<-rev(heat.colors(256))
+#2.set r1 and r1 variables
+r1<-range(mtPhylo)-median(mtPhylo)
+r2<-range(nuPhylo)-median(nuPhylo)
+#3.calculate proportion of larger range that smaller range takes up
+prop<-r1/r2
+#4.set the mid-range for smaller palette
+cent<-length(heatCol)/2+0.5
+ind<-cent/prop
+idx<-round(cent - c(1,-1)*ind)
+new_col<-heatCol[Reduce(seq,idx)]

@@ -1,0 +1,1 @@
+java -jar /global/software picard.jar CreateSequenceDictionary R=BaitScaffolds_stitched.fa O=BaitScaffolds_stitched.dict

@@ -1,0 +1,3 @@
+#in R
+> UniqueScaffolds<-SNPs[!duplicated(SNPs$"Scaffold"), ]
+

@@ -1,0 +1,5 @@
+samtools mpileup -uf ../../../index/GenomeAssembly.fa SRR709443_mt.bam | bcftools call -c | vcfutils.pl vcf2fq > SRR709443_consensus.fa
+
+
+
+

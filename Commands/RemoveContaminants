@@ -1,0 +1,27 @@
+module load java/1.8.0_45
+k=BTS33
+
+./../../bbmap/bbsplit.sh t=24 in=${k}/${k}_good_1.fastq in2=${k}/${k}_good_2.fastq ref_x=../../../index/GenomeAssembly.fa ref_y=../../../index/humanGenome.fa ambig2=best out_x=${k}/${k}_clean.fastq out_y=${k}/${k}_hum.fastq outu=${k}/${k}_unmapped.fastq
+./../../bbmap/bbsplit.sh t=24 in=${k}/${k}_good_1_singletons.fastq ref_x=../../../index/GenomeAssembly.fa ref_y=../../../index/humanGenome.fa ambig2=best out_x=${k}/${k}_clean_1_singletons.fastq out_y=${k}/${k}_hum_1_singletons.fastq outu=${k}/${k}_unmapped_1_singletons.fastq
+./../../bbmap/bbsplit.sh t=24 in=${k}/${k}_good_2_singletons.fastq ref_x=../../../index/GenomeAssembly.fa ref_y=../../../index/humanGenome.fa ambig2=best out_x=${k}/${k}_clean_2_singletons.fastq out_y=${k}/${k}_hum_2_singletons.fastq outu=${k}/${k}_unmapped_2_singletons.fastq
+
+echo "Program bbsplit finished with exit code $? at: `date`"
+
+cp ${k}/${k}_clean.fastq mus/${k}/${k}_nonHum.fastq
+cp ${k}/${k}_clean_1_singletons.fastq mus/${k}/${k}_nonHum_1_singletons.fastq
+cp ${k}/${k}_clean_2_singletons.fastq mus/${k}/${k}_nonHum_2_singletons.fastq
+cat ${k}/${k}_unmapped.fastq >> mus/${k}/${k}_nonHum.fastq
+cat ${k}/${k}_unmapped_1_singletons.fastq >> mus/${k}/${k}_nonHum_1_singletons.fastq
+cat ${k}/${k}_unmapped_2_singletons.fastq >> mus/${k}/${k}_nonHum_2_singletons.fastq
+
+./../../bbmap/bbsplit.sh t=24 in=mus/${k}/${k}_nonHum.fastq ref_x=../../../index/GenomeAssembly.fa ref_y=../../../index/MusGenome.fa ambig2=best out_x=mus/${k}/${k}_nonMus.fastq out_y=mus/${k}/${k}_Mus.fastq outu=mus/${k}/${k}_unmapped.fastq
+./../../bbmap/bbsplit.sh t=24 in=mus/${k}/${k}_nonHum_1_singletons.fastq ref_x=../../../index/GenomeAssembly.fa ref_y=../../../index/MusGenome.fa ambig2=best out_x=mus/${k}/${k}_nonMus_1_singletons.fastq out_y=mus/${k}/${k}_Mus_1_singletons.fastq outu=mus/${k}/${k}_unmapped_1_singletons.fastq
+./../../bbmap/bbsplit.sh t=24 in=mus/${k}/${k}_nonHum_2_singletons.fastq ref_x=../../../index/GenomeAssembly.fa ref_y=../../../index/MusGenome.fa ambig2=best out_x=mus/${k}/${k}_nonMus_2_singletons.fastq out_y=mus/${k}/${k}_Mus_2_singletons.fastq outu=mus/${k}/${k}_unmapped_2_singletons.fastq
+
+cp mus/${k}/${k}_nonMus.fastq mus/clean/${k}/${k}_clean.fastq
+cp mus/${k}/${k}_nonMus_1_singletons.fastq mus/clean/${k}/${k}_clean_1_singletons.fastq
+cp mus/${k}/${k}_nonMus_2_singletons.fastq mus/clean/${k}/${k}_clean_2_singletons.fastq
+cat mus/${k}/${k}_unmapped.fastq >> mus/clean/${k}/${k}_clean.fastq
+cat mus/${k}/${k}_unmapped_1_singletons.fastq >> mus/clean/${k}/${k}_clean_1_singletons.fastq
+cat mus/${k}/${k}_unmapped_2_singletons.fastq >> mus/clean/${k}/${k}_clean_2_singletons.fastq
+

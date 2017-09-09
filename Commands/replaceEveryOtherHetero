@@ -1,0 +1,4 @@
+perl -pe 's{0/1}{++$n % 2 ? $& : "0/0"}ge' remove_hetero.vcf > hetero_to_ref.vcf
+
+#then replace remaining 0/1 with alt homozygous
+ sed 's|0/1|1/1|g' hetero_to_ref.vcf > hetero_to_alt.vcf 

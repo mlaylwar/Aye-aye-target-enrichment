@@ -1,0 +1,6 @@
+#first add read groups to sam header as they aren't present
+#index new bam file with read groups using samtools index
+
+#call variants for single file
+/global/software/gatk/gatk322/bin/gatk.sh -Xmx1g -Xms1g -T HaplotypeCaller -R ../../../../index/BaitScaffolds_stitched.fa -I ${k}.bam --emitRefConfidence GVCF  -stand_call_conf 5 -variant_index_type LINEAR -variant_index_parameter 128000 -o ${k}.g.vcf
+

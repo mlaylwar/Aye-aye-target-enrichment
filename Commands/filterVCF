@@ -1,0 +1,8 @@
+SNPs only
+bcftools view -m2 -M2 -v snps joint_Y_calls.vcf > Y_SNPs.vcf
+
+Filter quality value
+bcftools filter -e "QUAL<100" Y_SNPs.vcf > Y_SNPs_QUAL.vcf
+
+Get one sample 
+ awk '{if ($11 !="./.:0,0,0") print}' Qual_20.recode.vcf > BTS27_present 

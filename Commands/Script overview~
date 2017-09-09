@@ -1,0 +1,79 @@
+Download data from globus or EMBL
+
+Upload to server:
+
+$ wget urlofFTPfrom EMBL
+ 
+OR
+
+$ scp path/to/files/on/local/machine breezy.westgrid.ca:/path/to/working/global/directory
+
+
+Load files into fastQC
+
+
+***********need to put command for this******
+
+Review the quality of the data and save output for comparison and use to set quality filters
+
+Use PRINSEQ to filter reads. Parameters can be changed but start with min lenght 100, min mean quality >30, trim both ends for bases <15Q
+
+$ ~/Software/prinseq-lite-0.20.4/prinseq-lite -fastq forwardReads.fastq -fastq2 reverseReads.fastq -trim_qual_right 15 -trim_qual_left 15 -min_len 100 -min_qual_mean 30 -out_format 3
+
+#This will generate four fastq files forward and reverse pair and singleton files
+
+These can then be aligned to the reference genome
+
+First index the reference using bwa index (these files will be stored in the same directory as the reference)
+$ /global/software/bwa/bwa0712/bin/bwa mem reference.fasta (can be compressed)
+
+Filter using prinseq
+~/Software/prinseq-lite-0.20.4/prinseq-lite -fastq ../../../data/northern/SRR709449_1.fastq -fastq2 ../../../data/northern/SRR709449_2.fastq -phred64 -trim_qual_right 15 -trim_qual_left 15 -min_len 90 -min_qual_mean 30 -out_format 3
+
+
+Then align
+$ /global/software/bwa/bwa0712/bin/bwa mem -t ${PBS_NUM_PPN} reference.fna pairedReadsFwd.fq pairedReadsReverse.fq > alignedPairs.sam
+
+$ /global/software/bwa/bwa0712/bin/bwa mem -t ${PBS_NUM_PPN} reference.fna fwdSingletons.fq > aligned_sngletons_1.sam
+
+$ /global/software/bwa/bwa0712/bin/bwa mem -t ${PBS_NUM_PPN} reference.fna revSingletons.fq > aligned_sngletons_2.sam
+
+Generate 
+sorted bam files of mapped reads
+module load samtools/1.3
+samtools view -b -F4 alignedPairs.sam | samtools sort -o sortedPairs.bam -
+samtools view -b -F4 aligned_singletons_1.sam | samtools sort -o sortedSingletons1.bam -
+samtools view -b -F4 aligned_singletons_2.sam | samtools sort -o sortedSingletons2.bam -
+
+Generate bam files of unmapped reads
+samtools view -b -f4 alignedPairs.sam > unmappedPairs.bam
+samtools view -b -f4 aligned_singletons_1.sam > unmappedSingletons_1.bam
+samtools view -b -f4 aligned_singletons_2.sam > unmappedSingletons_2.bam
+
+Picard tools to merge files and remove duplicates
+
+module load java/1.7.0_67
+
+java -jar /global/software/picard/picard1106/MergeSamFiles.jar I=BTS68_WG001_sort I=BTS_WG001_R1_sort I=BTS68_WG001_R2_sort I=BTS68_WG002_sort I=BTS68_WG002_R1_sort I=BTS68_WG002_R2_sort I=BTS68_WG003_sort I=BTS68_WG003_R1_sort I=BTS68_WG003_R2_sort I=BTS68_WG004_sort I=BTS68_WG004_R1_sort I=BTS68_WG004_R2_sort O=BTS68_picMerge.bam
+
+java -jar /global/software/picard/picard1106/MarkDuplicates.jar I=BTS68_picMerge.bam O=BTS68_WG_MarkDup.bam REMOVE_DUPLICATES=TRUE METRICS_FILE=Metrics_WG_BTS68.txt
+
+#to check for Ychrom alignment
+
+samtools index BTS68_WG_MarkDup.bam
+
+samtools idxstats BTS68_WG_MarkDup.bam #gives coverage for each scaffold
+
+grep -Ff YList.txt BTS68_WG_MarkDup.bam # shows alignment for only the Y-scaffolds
+
+#to remove reads that have mapped to multiple regions of the genome
+
+samtools view -bq 30 BTS68_WG_MarkDup.bam > BTS68_WG_MarkDup.bam #removes reads with a quality less than 30 (non-unique reads have qual of 0)
+
+#index and calculate stats for unique reads
+
+
+
+
+
+

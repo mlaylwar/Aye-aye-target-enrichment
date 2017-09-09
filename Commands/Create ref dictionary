@@ -1,0 +1,3 @@
+Create ref dictionary
+
+java -jar picard.jar CreateSequenceDictionary R=mtGenome.fa O=mtGenome.dict

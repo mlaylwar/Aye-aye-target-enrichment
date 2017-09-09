@@ -1,0 +1,1 @@
+perl -pe 's{0/1}{++$n % 2 ? $& : "0/0"}ge' remove_hetero.vcf > hetero_to_ref.vcf

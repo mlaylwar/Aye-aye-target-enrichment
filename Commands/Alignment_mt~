@@ -1,0 +1,18 @@
+module load samtools/1.3
+module load java/1.8.0_45
+j=27
+k=BTS27
+/global/software/bwa/bwa0712/bin/bwa mem -M -t 24 -R "@RG\tID:J00153\tPL:ILLUMINA\tPU:HF3YMBBXX.$j\tSM:$k\tLB:$k.1" -p ../index/mtGenome.fa ../data/SeqRound2/contaminants/mus/clean/${k}/"${k}_clean.fastq" | \
+samtools view -Sb -F4 - | samtools sort -o ${k}_mt_clean -
+
+/global/software/bwa/bwa0712/bin/bwa mem -M -t 24 -R "@RG\tID:J00153\tPL:ILLUMINA\tPU:HF3YMBBXX.$j\tSM:$k\tLB:$k.1" ../index/mtGenome.fa ../data/SeqRound2/contaminants/mus/clean/${k}/"${k}_clean_1_singletons.fastq" | \
+samtools view -Sb -F4 - | samtools sort -o ${k}_mt_R1_clean -
+
+/global/software/bwa/bwa0712/bin/bwa mem -M -t 24 -R "@RG\tID:J00153\tPL:ILLUMINA\tPU:HF3YMBBXX.$j\tSM:$k\tLB:$k.1" ../index/mtGenome.fa ../data/SeqRound2/contaminants/mus/clean/${k}/"${k}_clean_2_singletons.fastq" | \
+samtools view -Sb -F4 - | samtools sort -o ${k}_mt_R2_clean -
+
+java -jar /global/software/picard/picard1106/MarkDuplicates.jar I="${k}_mt_clean" I="${k}_mt_R1_clean" I="${k}_mt_R2_clean" O="${k}_mt_clean.bam" REMOVE_DUPLICATES=TRUE METRICS_FILE="${k}_Metrics_mt_clean.txt"
+
+samtools index ${k}_mt_clean.bam
+samtools flagstat ${k}_mt_clean.bam > ${k}_mt_clean_fstat
+

@@ -1,0 +1,8 @@
+
+dir.create(Sys.getenv("R_LIBS_mlaylwar"), showWarnings = FALSE, recursive = TRUE)
+
+install.packages("gplots", Sys.getenv("R_LIBS_mlaylwar"), repos = "http://cran.stat.sfu.ca/")
+
+#gives prompt to use personal library - select Y to create temp directory
+
+library(gplots)
